@@ -3,17 +3,27 @@ import { AppLayout } from "./Layout";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { ProductsList } from "@/features/products/ProductsList";
 import { runMigrations } from "@/db";
+import { seedProducts } from "@/db/seed";
 
 function App() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [dbReady, setDbReady] = useState(false);
 
   useEffect(() => {
-    runMigrations().then(() => setDbReady(true));
+    async function init() {
+      await runMigrations();
+      await seedProducts();
+      setDbReady(true);
+    }
+    init();
   }, []);
 
   if (!dbReady) {
-    return <div className="flex h-screen items-center justify-center text-muted-foreground">Initializing Database...</div>;
+    return (
+      <div className="flex h-dvh items-center justify-center text-muted-foreground">
+        Đang khởi tạo dữ liệu...
+      </div>
+    );
   }
 
   const renderContent = () => {
@@ -23,7 +33,11 @@ function App() {
       case "products":
         return <ProductsList />;
       default:
-        return <div className="text-muted-foreground">Component for {activeMenu} is under construction.</div>;
+        return (
+          <div className="text-muted-foreground">
+            Chức năng này đang được phát triển.
+          </div>
+        );
     }
   };
 
