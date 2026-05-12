@@ -5,6 +5,7 @@ import { useProductsStore } from "./store";
 import { ProductFilters } from "./ProductFilters";
 import { ProductTable } from "./ProductTable";
 import { ProductDialog } from "./ProductDialog";
+import { ProductImportPanel } from "./ProductImportPanel";
 import type { ProductFormValues } from "./schema";
 
 export function ProductsList() {
@@ -14,7 +15,6 @@ export function ProductsList() {
   const updateProduct = useProductsStore((s) => s.updateProduct);
   const deleteProduct = useProductsStore((s) => s.deleteProduct);
   const getProductById = useProductsStore((s) => s.getProductById);
-  const error = useProductsStore((s) => s.error);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -108,13 +108,14 @@ export function ProductsList() {
       </div>
 
       {/* Filters */}
-      <ProductFilters />
+      <ProductImportPanel
+        onImported={async () => {
+          await loadCategories();
+          await loadProducts();
+        }}
+      />
 
-      {error && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          Không thể kết nối Supabase: {error}
-        </div>
-      )}
+      <ProductFilters />
 
       {/* Table */}
       <ProductTable onEdit={handleOpenEdit} onDelete={handleDelete} />

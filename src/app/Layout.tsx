@@ -1,5 +1,13 @@
-import { ReactNode } from "react";
-import { LayoutDashboard, Package, ShoppingCart, Settings, ReceiptText } from "lucide-react";
+import type { ReactNode } from "react";
+import {
+  BarChart3,
+  ClipboardList,
+  LayoutDashboard,
+  Package,
+  PackagePlus,
+  Settings,
+  ShoppingCart,
+} from "lucide-react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,11 +19,14 @@ export function AppLayout({ children, activeMenu, onMenuChange }: LayoutProps) {
   const menuItems = [
     { id: "dashboard", label: "Tổng quan", icon: <LayoutDashboard size={20} /> },
     { id: "products", label: "Sản phẩm", icon: <Package size={20} /> },
+    { id: "receiving", label: "Nhập hàng", icon: <PackagePlus size={20} /> },
+    { id: "stock", label: "Lịch sử kho", icon: <ClipboardList size={20} /> },
     { id: "sales", label: "Bán hàng", icon: <ShoppingCart size={20} /> },
-    { id: "expenses", label: "Chi phí", icon: <ReceiptText size={20} /> },
+    { id: "reports", label: "Báo cáo", icon: <BarChart3 size={20} /> },
     { id: "settings", label: "Cài đặt", icon: <Settings size={20} /> },
   ];
-  const activeLabel = menuItems.find((item) => item.id === activeMenu)?.label ?? activeMenu;
+  const activeLabel =
+    menuItems.find((item) => item.id === activeMenu)?.label ?? activeMenu;
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground md:flex-row">
@@ -29,7 +40,9 @@ export function AppLayout({ children, activeMenu, onMenuChange }: LayoutProps) {
               key={item.id}
               onClick={() => onMenuChange(item.id)}
               className={`flex min-w-16 flex-1 flex-col items-center justify-center gap-1 rounded-md px-2 py-2 text-xs transition-colors md:w-full md:min-w-0 md:flex-none md:flex-row md:justify-start md:gap-3 md:px-3 md:text-base ${
-                activeMenu === item.id ? "bg-primary text-primary-foreground font-medium" : "hover:bg-muted text-muted-foreground"
+                activeMenu === item.id
+                  ? "bg-primary text-primary-foreground font-medium"
+                  : "hover:bg-muted text-muted-foreground"
               }`}
             >
               {item.icon}
