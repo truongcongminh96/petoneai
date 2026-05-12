@@ -14,6 +14,7 @@ export function ProductsList() {
   const updateProduct = useProductsStore((s) => s.updateProduct);
   const deleteProduct = useProductsStore((s) => s.deleteProduct);
   const getProductById = useProductsStore((s) => s.getProductById);
+  const error = useProductsStore((s) => s.error);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -108,6 +109,12 @@ export function ProductsList() {
 
       {/* Filters */}
       <ProductFilters />
+
+      {error && (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          Không thể kết nối Supabase: {error}
+        </div>
+      )}
 
       {/* Table */}
       <ProductTable onEdit={handleOpenEdit} onDelete={handleDelete} />

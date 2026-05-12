@@ -1,27 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AppLayout } from "./Layout";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { ProductsList } from "@/features/products/ProductsList";
-import { runMigrations } from "@/db";
-import { seedProducts } from "@/db/seed";
+import { isSupabaseConfigured } from "@/db/supabase";
 
 function App() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
-  const [dbReady, setDbReady] = useState(false);
 
-  useEffect(() => {
-    async function init() {
-      await runMigrations();
-      await seedProducts();
-      setDbReady(true);
-    }
-    init();
-  }, []);
-
-  if (!dbReady) {
+  if (!isSupabaseConfigured) {
     return (
-      <div className="flex h-dvh items-center justify-center text-muted-foreground">
-        Đang khởi tạo dữ liệu...
+      <div className="flex h-dvh items-center justify-center bg-background p-6">
+        <div className="max-w-lg rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h1 className="text-lg font-semibold">Chưa cấu hình Supabase</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Tạo file .env.local từ .env.example, sau đó điền
+            VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY của project Supabase.
+          </p>
+          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-3 text-xs">
+            VITE_SUPABASE_URL=https://your-project-ref.supabase.co{"\n"}
+            VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+          </pre>
+        </div>
       </div>
     );
   }

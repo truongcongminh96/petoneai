@@ -2,7 +2,7 @@
 
 PetOne AI is a desktop inventory and sales management app for small pet shops and veterinary businesses.
 
-The app is built with Tauri, React, TypeScript, SQLite, and Drizzle ORM. It runs locally on the user's machine and stores data in a local SQLite database through the Tauri SQL plugin.
+The app is built with Tauri, React, TypeScript, and Supabase Postgres. The desktop app connects to a cloud Supabase database so inventory data can be shared across devices later.
 
 ## Features
 
@@ -18,7 +18,7 @@ The app is built with Tauri, React, TypeScript, SQLite, and Drizzle ORM. It runs
 - Desktop runtime: Tauri v2, Rust
 - Frontend: React, TypeScript, Vite
 - Styling: Tailwind CSS, shadcn-style UI components, Base UI primitives
-- Database: SQLite, Drizzle ORM, Tauri SQL plugin
+- Database: Supabase Postgres
 - Icons: Lucide React
 - Spreadsheet export: SheetJS (`xlsx`)
 
@@ -48,6 +48,25 @@ Install dependencies:
 
 ```sh
 pnpm install
+```
+
+Create a Supabase project, then run the SQL in:
+
+```text
+supabase/schema.sql
+```
+
+Create `.env.local` from `.env.example`:
+
+```sh
+cp .env.example .env.local
+```
+
+Fill in the values from Supabase Project Settings > API:
+
+```env
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
 Run the Tauri desktop app in development mode:
@@ -86,27 +105,15 @@ pnpm tauri build
 
 ## Database
 
-The app uses a local SQLite database loaded with:
+The cloud schema lives in:
 
-```ts
-Database.load("sqlite:petoneai.db")
-```
+- `supabase/schema.sql`
 
-The schema lives in:
+The Supabase client lives in:
 
-- `src/db/schema.ts`
+- `src/db/supabase.ts`
 
-Generated migrations live in:
-
-- `src/db/migrations`
-
-Generate a new migration after changing the schema:
-
-```sh
-pnpm exec drizzle-kit generate
-```
-
-Current migrations are loaded at app startup by `runMigrations()` in `src/db/index.ts`.
+The current MVP connects directly from the Tauri frontend to Supabase using the anon key. Before distributing to real customers, add authentication, shop ownership, and Row Level Security policies so each shop can only access its own data.
 
 ## Project Structure
 
