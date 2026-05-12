@@ -74,6 +74,18 @@ Build the desktop app:
 pnpm tauri build
 ```
 
+Build a macOS `.dmg` package on macOS:
+
+```sh
+pnpm build:mac
+```
+
+Build a Windows `.exe` installer on Windows:
+
+```sh
+pnpm build:win
+```
+
 ## Available Scripts
 
 | Command | Description |
@@ -83,7 +95,8 @@ pnpm tauri build
 | `pnpm preview` | Serves the production frontend build locally. |
 | `pnpm tauri dev` | Starts the full Tauri desktop app in development mode. |
 | `pnpm tauri build` | Builds the distributable desktop app. |
-| `pnpm build:win` | Builds the Windows desktop `.exe` and installer bundles through Tauri. |
+| `pnpm build:mac` | Builds a macOS `.dmg` package. Run this on macOS. |
+| `pnpm build:win` | Builds a Windows NSIS `.exe` installer. Run this on Windows. |
 | `pnpm test:e2e` | Runs Playwright smoke, navigation, responsive, and performance tests in web E2E mode. |
 | `pnpm test:e2e:ui` | Opens the Playwright interactive test runner. |
 
@@ -95,7 +108,23 @@ pnpm exec playwright install chromium
 
 The Playwright suite runs Vite with `VITE_E2E=1`, which uses a browser-only mock database. The production Tauri app still uses the local SQLite database through `sqlite:petoneai.db`.
 
-## Windows Demo Build
+## Desktop Build Targets
+
+### macOS DMG
+
+Build the macOS disk image on macOS:
+
+```sh
+pnpm build:mac
+```
+
+The macOS output is generated under:
+
+```text
+src-tauri/target/release/bundle/dmg/
+```
+
+### Windows EXE
 
 Install the Windows build prerequisites once:
 
@@ -112,7 +141,7 @@ rustc --version
 cargo --version
 ```
 
-Build the demo app:
+Build the Windows installer on Windows:
 
 ```powershell
 pnpm build:win
@@ -122,7 +151,7 @@ The Windows outputs are generated under:
 
 ```text
 src-tauri\target\release\
-src-tauri\target\release\bundle\
+src-tauri\target\release\bundle\nsis\
 ```
 
 ## Database
